@@ -1,6 +1,7 @@
 'use client'
 import Head from "next/head";
 import SideBarMenu from "@/components/SideBarMenu"
+
 export default function HomepageLayout({children}) {
     return (
         <div className="bg-blue-800">
