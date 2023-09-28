@@ -3,12 +3,23 @@ import Image from "next/image";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdOutlineLogout, MdCatchingPokemon } from "react-icons/md";
 import { GiPlantsAndAnimals, GiPodiumWinner } from "react-icons/gi";
+import DialogLogOut from "./DialogLogOut";
 
 export default function SideBarMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const openLogoutDialog = () => {
+    setIsLogoutDialogOpen(true);
+    
+  };
+
+  const closeLogoutDialog = () => {
+    setIsLogoutDialogOpen(false);
   };
 
   return (
@@ -58,17 +69,22 @@ export default function SideBarMenu() {
                 </h3>
               </div>
             </div>
-            {/* logout */}
             <div className="my-4">
-              <div className="flex justify-end">
+            <div className="flex justify-end">
                 <div className="flex flex-col items-end gap-2">
-                  <div className="flex items-center gap-2 border border-gray-200 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg">
-                    <MdOutlineLogout className="text-lg text-gray-600 group-hover:text-white" />
-                    <h3 className="text-base text-gray-800 group-hover:text-white font-semibold">Logout</h3>
+                  <div>
+                    <div
+                      className="flex items-center gap-2 border border-gray-200 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg"
+                      onClick={openLogoutDialog} // Abre el diálogo de logout al hacer clic en el botón de logout
+                    >
+                      <MdOutlineLogout className="text-lg text-gray-600 group-hover:text-white" />
+                      <h3 className="text-base text-gray-800 group-hover:text-white font-semibold">Logout</h3>
+                    </div>
                   </div>
                 </div>
-              </div>
             </div>
+            </div>
+            <DialogLogOut isOpen={isLogoutDialogOpen} closeModal={closeLogoutDialog} />
           </div>
         </div>
       </div>
