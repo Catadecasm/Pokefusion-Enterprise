@@ -3,28 +3,31 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import validator from "validator";
-import {loginUser} from '../services/loginService';
-import Swal from 'sweetalert2';
-import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation'
-
+import { loginUser } from "../services/loginService";
+import Swal from "sweetalert2";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
+
+  if(Cookies.get("token")){
+    router.push("/homepage", { scroll: false });
+  }
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const newEmail = e.target.value;
     setEmail(newEmail);
-  
+
     if (!validator.isEmail(newEmail)) {
-      setEmailError('Please enter a valid email address');
+      setEmailError("Please enter a valid email address");
     } else {
-      setEmailError('');
+      setEmailError("");
     }
   };
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,26 +41,40 @@ export default function SignIn() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login button clicked');
-    try{
-      const response  = await loginUser(email, password);
-      Cookies.set('token', response.data.token); 
-      router.push('/homepage', { scroll: false })      
-    }catch(error){
-      if(error.response.status === 400){
+    try {
+      const response = await loginUser(email, password);
+      //validate if the user mark the remember me checkbox
+      if ((document.getElementById("remember") as HTMLInputElement)?.checked) {
+        const expirationDate = new Date();
+        const daysUntilExpiration = 1;
+        expirationDate.setDate(expirationDate.getDate() + daysUntilExpiration);
+        Cookies.set("token", response.data.token, { expires: expirationDate });
+      }
+      //save the token in the sesion storage
+      sessionStorage.setItem("token", response.data.token);
+      Swal.fire({
+        icon: "success",
+        title: "Welcome!",
+        text: "You have successfully logged in",
+        confirmButtonText: "Ok",
+      });
+
+      router.push("/homepage", { scroll: false });
+    } catch (error) {
+      if (error.response.status === 400) {
         Swal.fire({
-          icon:'info',
-          title:'Oops...',
-          text:'You are already logged in',
-          confirmButtonText:'Ok'
+          icon: "info",
+          title: "Oops...",
+          text: "You are already logged in",
+          confirmButtonText: "Ok",
         });
-        router.push('/homepage', { scroll: false })
-      }else if(error.response.status === 500){
+        router.push("/homepage", { scroll: false });
+      } else if (error.response.status === 500) {
         Swal.fire({
-          icon:'error',
-          title:'Oops...',
-          text:'The email or password is incorrect',
-          confirmButtonText:'Ok'
+          icon: "error",
+          title: "Oops...",
+          text: "The email or password is incorrect",
+          confirmButtonText: "Ok",
         });
       }
     }
@@ -155,7 +172,6 @@ export default function SignIn() {
                         aria-describedby="remember"
                         type="checkbox"
                         className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                        required
                       />
                     </div>
                     <div className="ml-3 text-sm">
