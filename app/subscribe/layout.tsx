@@ -1,4 +1,4 @@
-import SignIn from "@/components/SignIn";
+import SignIn from "@/components/SignUp";
 import Head from "next/head";
 
 export default function Subscribe() {
