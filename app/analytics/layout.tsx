@@ -4,7 +4,7 @@ import Homepage from "@/components/HomePage";
 import SideBarMenu from "@/components/SideBarMenu"
 import RemarkableGoals from "@/components/RemarkableGoals";
 
-export default function HomepageLayout({children}) {
+export default function Analytics({children}) {
     return (
         <div className="#DC0A2D">
           <Head>
@@ -12,11 +12,10 @@ export default function HomepageLayout({children}) {
             <link rel="icon" href="/pro.ico" />
           </Head>
           <div>
-          <Homepage/>
-        </div>
+          <RemarkableGoals/>
         <SideBarMenu />
-    
-
+        </div>
+        
       </div>
           
       );
