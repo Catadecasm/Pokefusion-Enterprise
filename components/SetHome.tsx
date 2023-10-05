@@ -16,7 +16,7 @@ export default function SetHome() {
         border="0"
         className="w-90 h-40 mb-2" 
       />
-      <a href="https://tu-otra-url-de-destino.com">
+      <a href="/subscribe">
       <img
           src="https://iili.io/J2fzSSV.webp"
           alt="Pokeball"
