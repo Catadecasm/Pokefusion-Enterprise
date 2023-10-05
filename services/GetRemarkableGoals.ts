@@ -9,13 +9,7 @@ export async function getCapturedPokemonCount() {
     const headers = {
 
       Authorization: `Bearer ${token}`
-    };
-
-    const response = await axios.get('https://pure-sands-54885-c60c4fd3c1bb.herokuapp.com/api/pokemons/getAmountPokemons', { headers });
-
-
-      Authorization: `Bearer ${token}`,
-    };
+    }; 
 
     const response = await axios.get('https://pure-sands-54885-c60c4fd3c1bb.herokuapp.com/api/pokemons/getAmountPokemons', { headers });
     console.log('Respuesta de la API:', response);
