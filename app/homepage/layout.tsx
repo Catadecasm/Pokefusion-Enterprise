@@ -2,6 +2,7 @@
 import Head from "next/head";
 import Homepage from "@/components/HomePage";
 import SideBarMenu from "@/components/SideBarMenu"
+import RemarkableGoals from "@/components/RemarkableGoals";
 
 export default function HomepageLayout({children}) {
     return (
@@ -14,6 +15,8 @@ export default function HomepageLayout({children}) {
           <Homepage/>
         </div>
         <SideBarMenu />
+    
+
       </div>
           
       );
