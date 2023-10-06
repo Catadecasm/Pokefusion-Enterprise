@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import Cookies from "js-cookie";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdOutlineLogout, MdCatchingPokemon } from "react-icons/md";
 import { GiPlantsAndAnimals, GiPodiumWinner } from "react-icons/gi";
@@ -17,6 +18,8 @@ export default function SideBarMenu() {
   const openLogoutDialog = () => {
     logOut().then((response) => {
       setIsLogoutDialogOpen(true);
+      sessionStorage.clear();
+      Cookies.remove("token");      
      });
   };
 

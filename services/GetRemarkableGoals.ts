@@ -26,7 +26,7 @@ export async function getInfofights() {
 export async function getCapturedPokemonCount() {
   try {
     // Obtén el token de sesión de sessionStorage
-    const token = sessionStorage.getItem('token');
+    let token = sessionStorage.getItem('token');
 
     // Configura los encabezados de la solicitud con el token
     const headers = {
