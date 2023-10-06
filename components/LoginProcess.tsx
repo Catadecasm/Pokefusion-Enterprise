@@ -61,7 +61,7 @@ export default function SignIn() {
 
       router.push("/homepage", { scroll: false });
     } catch (error) {
-      if (error.response.status === 400) {
+      if ((error as any).response.status === 400) {
         Swal.fire({
           icon: "info",
           title: "Oops...",
@@ -69,7 +69,7 @@ export default function SignIn() {
           confirmButtonText: "Ok",
         });
         router.push("/homepage", { scroll: false });
-      } else if (error.response.status === 500) {
+      } else if ((error as any).response.status === 500) {
         Swal.fire({
           icon: "error",
           title: "Oops...",

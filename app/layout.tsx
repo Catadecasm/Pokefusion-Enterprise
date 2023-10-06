@@ -2,14 +2,15 @@
 import './global.css';
 
 
-export default function RootLayout({children}) {
-  return <html>
+import { ReactNode } from 'react';
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html>
       <head>
         <title> Pokefusion Enterprise</title>
-      
       </head>
-      <body>
-        {children}
-      </body>
-    </html>  
+      <body>{children}</body>
+    </html>
+  );
 }
