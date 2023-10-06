@@ -1,6 +1,23 @@
+import React, { useEffect } from "react";
+import {getCapturedPokemonCount, getInfofights} from "../services/GetRemarkableGoals";
 
-import React from "react";
 export default function RemarkableGoals() {
+  const [CatchedPokemons, setCatchePokemons] = React.useState(0);
+  const [NumberWins, setNumberWins] = React.useState(0);
+  const [TotalFights, setTotalFights] = React.useState(0);
+
+  useEffect(() => {
+
+    getInfofights().then((response) => {
+      setNumberWins(response.totalWins);
+      setTotalFights(response.totalFights);
+    });
+
+    getCapturedPokemonCount().then((response) => {
+      setCatchePokemons(response);
+    });
+
+  }, []);
   
 
   const ColorBar = ({ color, width }: { color: string; width: string }) => (
@@ -55,7 +72,7 @@ export default function RemarkableGoals() {
                     xmlns="http://www.w3.org/2000/svg"
                   ></svg>
                   <span className="flex-1 ml-3 whitespace-nowrap">
-                    Caught Pokemons
+                    Caught Pokemons {CatchedPokemons}
                   </span>
                 </a>
                 <div className="flex-start flex h-4 w-full overflow-hidden rounded bg-blue-gray-50 font-sans text-xs font-medium">
@@ -80,7 +97,7 @@ export default function RemarkableGoals() {
                     xmlns="http://www.w3.org/2000/svg"
                   ></svg>
                   <span className="flex-1 ml-3 whitespace-nowrap">
-                    Battle Arena
+                    Battle Arena 
                   </span>
                 </a>
                 <div className="flex-start flex h-4 w-full overflow-hidden rounded bg-blue-gray-50 font-sans text-xs font-medium">
@@ -106,7 +123,7 @@ export default function RemarkableGoals() {
                   >
                     
                   </svg>
-                  <span className="flex-1 ml-3 whitespace-nowrap">Fights</span>
+                  <span className="flex-1 ml-3 whitespace-nowrap">Fights {TotalFights}</span>
                 </a>
                 <div className="flex-start flex h-4 w-full overflow-hidden rounded bg-blue-gray-50 font-sans text-xs font-medium">
                 <div
@@ -131,7 +148,7 @@ export default function RemarkableGoals() {
                   >
                    
                   </svg>
-                  <span className="flex-1 ml-3 whitespace-nowrap">Wins</span>
+                  <span className="flex-1 ml-3 whitespace-nowrap">Wins {NumberWins}</span>
                 </a>
                 <div className="flex-start flex h-4 w-full overflow-hidden rounded bg-blue-gray-50 font-sans text-xs font-medium">
                 <div

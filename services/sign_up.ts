@@ -1,3 +1,4 @@
+import { API_URL } from "@/app/Utils/Constants";
 import axios from "axios";
 export async function signUpUser(
   email: String,
@@ -7,7 +8,7 @@ export async function signUpUser(
 ) {
   try {
     const endpoint =
-      "https://pure-sands-54885-c60c4fd3c1bb.herokuapp.com/api/users/sign-up";
+      API_URL+"/api/users/sign-up";
 
     const data = {
       email: email,
