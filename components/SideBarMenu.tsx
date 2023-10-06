@@ -4,6 +4,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { MdOutlineLogout, MdCatchingPokemon } from "react-icons/md";
 import { GiPlantsAndAnimals, GiPodiumWinner } from "react-icons/gi";
 import DialogLogOut from "./DialogLogOut";
+import {logOut} from "../services/LogOutService";
 
 export default function SideBarMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,7 +15,9 @@ export default function SideBarMenu() {
   };
 
   const openLogoutDialog = () => {
-    setIsLogoutDialogOpen(true);
+    logOut().then((response) => {
+      setIsLogoutDialogOpen(true);
+     });
   };
 
   const closeLogoutDialog = () => {

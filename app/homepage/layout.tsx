@@ -2,9 +2,16 @@
 import Head from "next/head";
 import Homepage from "@/components/HomePage";
 import SideBarMenu from "@/components/SideBarMenu"
+import Cookies from "js-cookie";
 import RemarkableGoals from "@/components/RemarkableGoals";
 
 export default function HomepageLayout({children}) {
+  if (sessionStorage.getItem('token') == null || Cookies.get('token') == null) {
+    // Redireccionar al usuario a la página de login si no tiene token
+    window.location.href = '/login';
+    // Puedes retornar null o cualquier otro contenido mientras se redirige
+    return null;
+  }
     return (
         <div className="#DC0A2D">
           <Head>
