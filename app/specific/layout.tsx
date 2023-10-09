@@ -2,14 +2,12 @@
 
 import Head from "next/head";
 
-import Pokemon from "@/components/Pokemon";
-import SearchBar from "@/components/SearchBar";
-import SideBarMenu from "@/components/SideBarMenu";
+import SpecificPokemon from "@/components/SpecificPokemon";
 
 
 
 
-export default function Pokedex({children}) {
+export default function Specific({children}) {
     return (
         <div >
         <Head>
@@ -18,10 +16,10 @@ export default function Pokedex({children}) {
   rel="stylesheet"/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
       </Head>
-      <SideBarMenu/>
+      
       
         <div>
-          <Pokemon />
+        <SpecificPokemon/>
         </div>
     
       </div>
