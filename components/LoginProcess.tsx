@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import validator from "validator";
-import { loginUser } from "../services/loginService";
+import { loginUser, getUser } from "../services/loginService";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,7 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
-  if(Cookies.get("token")){
+  if (Cookies.get("token")) {
     router.push("/homepage", { scroll: false });
   }
 
@@ -52,6 +52,9 @@ export default function SignIn() {
       }
       //save the token in the sesion storage
       sessionStorage.setItem("token", response.data.token);
+      const user = await getUser();
+      sessionStorage.setItem("name", user.username);
+      sessionStorage.setItem("email", user.email);
       Swal.fire({
         icon: "success",
         title: "Welcome!",
@@ -67,8 +70,11 @@ export default function SignIn() {
           title: "Oops...",
           text: "You are already logged in",
           confirmButtonText: "Ok",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            router.push("/homepage", { scroll: false });
+          }
         });
-        router.push("/homepage", { scroll: false });
       } else if ((error as any).response.status === 500) {
         Swal.fire({
           icon: "error",
@@ -192,6 +198,7 @@ export default function SignIn() {
                 </div>
                 <button
                   type="submit"
+                  id="login-button"
                   className="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                 >
                   Login
