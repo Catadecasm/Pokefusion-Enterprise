@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Cookies from "js-cookie";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -10,6 +10,13 @@ import {logOut} from "../services/LogOutService";
 export default function SideBarMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    setName(sessionStorage.getItem("name") || "");
+    setEmail(sessionStorage.getItem("email") || "");
+  }, []);
 
   const toggleSlide = () => {
     setIsOpen(!isOpen);
@@ -56,10 +63,10 @@ export default function SideBarMenu() {
               alt="avatar"
             />
             <h4 className="mx-2 mt-2 font-medium text-gray-800 dark:text-gray-200">
-              John Doe
+              {name}
             </h4>
             <p className="mx-2 mt-1 text-sm font-medium text-gray-600 dark:text-gray-400">
-              john@example.com
+              {email}
             </p>
           </div>
 
