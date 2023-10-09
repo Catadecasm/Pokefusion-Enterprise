@@ -1,16 +1,19 @@
-"use client";
-
 import SearchBar from "./SearchBar";
 import { BiArrowBack } from "react-icons/bi";
 import { GrLinkNext } from "react-icons/gr";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, lazy, Suspense} from "react";
 import axios from "axios";
+import SpecificPokemon from "./SpecificPokemon";
 
 export default function Pokemon() {
   const [pokemonList, setPokemonList] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [filter, setFilter] = useState("");
   const [totalPokemonCount, setTotalPokemonCount] = useState(0);
+  const [selectedPokemonData, setSelectedPokemonData] = useState(null);
+  const [selectedPokemonId, setSelectedPokemonId] = useState(null);
+  const [isSpecificPokemonOpen, setIsSpecificPokemonOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchTotalPokemonCount = async () => {
@@ -27,9 +30,11 @@ export default function Pokemon() {
 
   useEffect(() => {
     const fetchPokemonList = async () => {
+      setIsLoading(true);
+
       try {
         const offset = currentPage * 24;
-        const limit = Math.min(24, totalPokemonCount - offset); // Asegurarse de no exceder la cantidad total
+        const limit = Math.min(24, totalPokemonCount - offset);
         const response = await axios.get(
           `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
         );
@@ -43,13 +48,29 @@ export default function Pokemon() {
         );
 
         setPokemonList(pokemonDetails);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error al obtener la lista de Pokémon:", error);
+        setIsLoading(false);
       }
     };
 
     fetchPokemonList();
   }, [currentPage, totalPokemonCount]);
+
+  const handlePokemonCardClick = async (id) => {
+    setSelectedPokemonId(id);
+    setIsSpecificPokemonOpen(true);
+
+    try {
+      const response = await axios.get(
+        `https://pokeapi.co/api/v2/pokemon/${id}/`
+      );
+      setSelectedPokemonData(response.data);
+    } catch (error) {
+      console.error("Error al obtener detalles adicionales del Pokémon:", error);
+    }
+  };
 
   const loadNextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -67,19 +88,41 @@ export default function Pokemon() {
 
   return (
     <>
-      <SearchBar handleSearch={handleSearch} filter={filter} />
-      <div className="flex items-center justify-center pt-6">
-        <div className="flex flex-wrap justify-center w-[690px] h-[562px] px-3 pt-6 bg-white rounded-lg shadow-inner justify-start items-start gap-2 inline-flex">
-          {pokemonList
-            .filter(
-              (pokemon) =>
-                pokemon.name.toLowerCase().includes(filter.toLowerCase())
-            )
-            .map((pokemon) => (
-              <div
-                key={pokemon.id}
-                className="w-[104px] h-[108px] bg-white rounded-lg shadow flex-col justify-between items-center inline-flex relative"
-              >
+    
+    <SearchBar handleSearch={handleSearch} filter={filter} />
+      {isSpecificPokemonOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <Suspense fallback={<div>Cargando...</div>}>
+            <SpecificPokemon
+              pokemonId={selectedPokemonId}
+              pokemonData={selectedPokemonData}
+              onClose={() => setIsSpecificPokemonOpen(false)}
+            />
+          </Suspense>
+        </div>
+      )}
+
+      {isLoading ? (
+        <div className="flex items-center justify-center font-normal font-Poppins pt-6">Loading...</div>
+      ) : (
+        <pokemonList
+          pokemonList={pokemonList}
+          filter={filter}
+          handlePokemonCardClick={handlePokemonCardClick}
+        />
+      )}
+  <div className="flex items-center justify-center pt-6">
+    <div className="flex flex-wrap justify-center w-[690px] h-[562px] px-3 pt-6 bg-white rounded-lg shadow-inner justify-start items-start gap-2 inline-flex">
+      {pokemonList
+        .filter((pokemon) =>
+          pokemon.name.toLowerCase().includes(filter.toLowerCase())
+        )
+        .map((pokemon) => (
+          <div
+            key={pokemon.id}
+            className="w-[104px] h-[108px] bg-white rounded-lg shadow flex-col justify-between items-center inline-flex relative"
+            onClick={() => handlePokemonCardClick(pokemon.id)}
+          >
                 <div className="self-stretch px-2 pt-1 justify-end items-start gap-2 inline-flex">
                   <div className="text-right text-stone-500 text-[8px] font-normal font-Poppins leading-3">
                     #{pokemon.id}
@@ -139,6 +182,7 @@ export default function Pokemon() {
           </li>
         </ul>
       </nav>
+      
     </>
   );
 }

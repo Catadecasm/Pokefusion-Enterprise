@@ -94,13 +94,13 @@ export default function SearchBar({ handleSearch }) {
           value={filter}
           onChange={(e) => {
             setFilter(e.target.value);
-            handleSearch(e.target.value); // Llama a handleSearch para actualizar el filtro en Pokemon
+            handleSearch(e.target.value); 
           }}
           className="w-full h-10 px-4 py-2 bg-transparent border-none focus:outline-none"
         />
 
           <div className="grow shrink basis-0 text-stone-500 text-[10px] font-normal font-Poppins leading-none">
-            Search
+           
             
           </div>
         </div>
